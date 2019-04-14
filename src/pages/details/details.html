@@ -1,0 +1,339 @@
+<!-- <ion-header>
+    <ion-navbar color="blecolor">
+      <ion-title class="title">Details</ion-title>
+    </ion-navbar>
+  </ion-header> -->
+
+<ion-header no-border style="background:#0097A7">
+  <div id="xxx">
+
+    <ion-navbar color="blecolor" style="height:4.78vh">
+      <ion-buttons (click)="backfir()" left>
+        <button ion-button icon-only style="width:20px;padding-top: -7px;
+        margin-left: -45px;">
+          <ion-icon class="btnarrow" name="md-arrow-back"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title style="text-align:center;margin-right: 9vw;font-size: 18px">Details</ion-title>
+      <ion-buttons right>
+        <button ion-button disabled="disabled" style="width:20px">
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+    <div>
+
+      <ion-list mode="md" style="height:7.62vh" no-lines>
+        <!-- [ngClass]="{'hidden':true}"  -->
+        <button mode="md" class="btncontent" ion-item (click)="breakCon()">
+          <div>
+            <div  class="left">
+              <p class="p1">{{ text1 }}</p>
+              <p class="p2">{{ text2 }}</p>
+            </div>
+            <div class="right">
+              <div>
+                <div style="float:left;margin-right: 8px;padding-bottom: 4px;">
+                  <ion-icon class="topconshow" color="con" name="ios-bluetooth-outline"></ion-icon>
+                </div>
+                <div class="rssiconnect"><span class="rssiconnectspan">{{signal}}</span> </div>
+              </div>
+              <div class="topconnected">{{isCons}}</div>
+            </div>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+  </div>
+
+  <div style=" background-color: #0097A7;">
+    <ion-segment [(ngModel)]="tabs">
+      <ion-segment-button value="general">
+        <span style="font-size: 15px;text-transform: none;"> General</span>
+        <!-- <div class="bolder-sm"></div> -->
+      </ion-segment-button>
+      <ion-segment-button value="values">
+        <span style="font-size: 15px;text-transform: none;"> Valves</span>
+        <!-- <div class="bolder-sm"></div> -->
+      </ion-segment-button>
+      <ion-segment-button value="sensors">
+        <span style="font-size: 15px;text-transform: none;"> Sensors</span>
+        <!-- <div class="bolder-sm"></div> -->
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+</ion-header>
+
+
+
+
+<ion-content>
+  <!-- (ionScroll)="scrollEvent($event)" overflow-scroll="true" -->
+  <!-- <div style="height:102px;width:100vw;background:transparent"></div> -->
+
+  <div [ngSwitch]="tabs">
+    <div *ngSwitchCase="'general'">
+      <div class="pcb"> <span class="headtext">PCB</span></div>
+      <div class="spandiv">
+        <span class="span1">Temp</span>
+        <span class="span2">{{pcbdec}} ℃</span>
+      </div>
+      <div class="line"></div>
+      <div class="spandiv1">
+        <span class="span1">Moisture</span>
+        <span class="span2">{{pcbshidu}} %</span>
+      </div>
+
+      <div class="pcb">Control</div>
+      <div class="spandiv">
+        <span class="span1">{{controlV}}</span>
+        <span class="span2"> V</span>
+      </div>
+      <div class="line"></div>
+
+      <div class="spandiv1">
+        <span class="span1">{{controlmA}}</span>
+        <span class="span2"> A</span>
+      </div>
+
+      <div class="pcb">Field</div>
+      <div class="spandiv">
+        <span class="span1">{{fieldV}}</span>
+        <span class="span2"> V</span>
+      </div>
+      <div class="line"></div>
+
+      <div class="spandiv1">
+        <span class="span1">{{fieldmA}}</span>
+        <span class="span2"> A</span>
+      </div>
+
+      <div class="pcb">Encoders</div>
+      <div class="spandiv">
+        <span class="span1">{{encoders1}}</span>
+        <!-- <span class="span2">Deg C</span> -->
+      </div>
+      <div class="line"></div>
+
+      <div class="spandiv1">
+        <span class="span1">{{encoders2}}</span>
+        <!-- <span class="span2">%</span> -->
+      </div>
+
+      <div class="pcb">Strain</div>
+      <div class="spandiv">
+        <span class="span1">{{strain1}}</span>
+        <span class="span2"> mV</span>
+      </div>
+      <div class="line"></div>
+
+      <div class="spandiv1">
+        <span class="span1">{{strain2}}</span>
+        <span class="span2"> mV</span>
+      </div>
+
+
+      <div class="pcb"> <span class="headtext">PT100</span></div>
+      <div class="spandiv">
+        <span class="span1">Temp1</span>
+        <span class="span2">{{temp1}} ℃</span>
+      </div>
+      <div class="line"></div>
+      <div class="spandiv1">
+        <span class="span1">Temp2</span>
+        <span class="span2">{{temp2}} ℃</span>
+      </div>
+
+      <!-- <div class="pcb">Temp1</div>
+      <div class="spandiv">
+        <span class="span1">{{temp1}}</span>
+        <span class="span2">Deg C</span>
+      </div>
+
+
+      <div class="pcb">Temp2</div>
+      <div class="spandiv">
+        <span class="span1">{{temp2}}</span>
+        <span class="span2">Deg C</span>
+      </div> -->
+
+
+      <!-- <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>帧数：</div>
+      <div>
+        <p>第{{sentcount}}帧</p>
+      </div> -->
+
+      <!-- <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>volAhavebac打印：</div>
+      <div>
+        <p>{{volAhavebac}}</p>
+      </div>
+
+      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>volBhavebac打印：</div>
+      <div>
+        <p>{{volBhavebac}}</p>
+      </div>
+
+      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>volvesPercentArry打印：</div>
+      <div>
+        <p>{{volvesPercentArry}}</p>
+      </div>
+
+
+      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>volvesmAArray打印：</div>
+      <div>
+        <p>{{volvesmAArray}}</p>
+      </div>
+
+
+      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>power打印：</div>
+      <div>
+        <p>{{power}}</p>
+      </div>
+
+
+
+      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>Values</div>
+      <div>
+        <p>{{ValuesString}}</p>
+      </div>
+
+      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>Values2</div>
+      <div>
+        <p>{{Values2String}}</p>
+      </div>  -->
+
+
+     <div style="width:100vw;height:5px;background:#f00"></div>
+      <div>设备信息：</div>
+      <div>
+        <p>{{peripheralconsole}}</p>
+      </div>
+      flaged
+      <div style="width:100vw;height:5px;background:#f00"></div>
+      <div>flaged:</div>
+      <div>
+        <p>{{flaged}}</p>
+      </div>
+      <div style="width:100vw;height:5px;background:#f00"></div>
+      <div>168完整字节打印：</div>
+      <div>
+        <p>{{readdataconsole22}}</p>
+      </div>
+
+      <div style="width:100vw;height:5px;background:#f00"></div>
+      <div>160完整字节打印：</div>
+      <div>
+        <p>{{readdataconsole33}}</p>
+      </div>
+
+      <div style="width:100vw;height:5px;background:#f00"></div>
+      <div>328完整字节打印：</div>
+      <div>
+        <p>{{readdataconsole44}}</p>
+      </div>
+
+      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+      <div>328-4-6-6 = 312个字节数据打印：</div>
+      <div>
+        <p>{{readdataconsole4}}</p>
+      </div>
+
+      <div *ngFor="let value of readdataconsole4arry;let i = index;">
+        <div>
+          <span>312中第{{i}}个字节：{{value}}</span>
+        </div>
+      </div> 
+
+    </div>
+
+    <div *ngSwitchCase="'values'">
+      <div style="height:15px;width:100vw; background:#FFFFFFFF"></div>
+      <ion-list mode="md">
+        <div class="valuediv" *ngFor="let value of Values;let i = index;">
+          <div class="valueshow"><span class="spanfirst">{{i+1}}</span> </div>
+          <div *ngIf="value.t5; then thenBlocks; else elseBlocks"></div>
+          <ng-template #thenBlocks>
+            <div class="valueshow">
+              <div class="div2">{{value.t1}}</div>
+            </div>
+          </ng-template>
+          <ng-template #elseBlocks>
+            <div class="valueshow">
+              <div class="div22">{{value.t1}}</div>
+            </div>
+          </ng-template>
+
+          <div class="valueshow">
+            <div class="div3">{{value.t2}}</div>
+          </div>
+
+          <div *ngIf="value.t6; then thenBlock; else elseBlock"></div>
+          <ng-template #thenBlock>
+            <div class="valueshow">
+              <div class="div4">{{value.t3}}</div>
+            </div>
+          </ng-template>
+          <ng-template #elseBlock>
+            <div class="valueshow">
+              <div class="div44">{{value.t3}}</div>
+            </div>
+          </ng-template>
+
+          <div class="valueshow"><span class="spansecond">{{value.t4}}</span>
+          </div>
+          <div class="valueshow"> <span class="spanthird">mA</span>
+          </div>
+
+        </div>
+      </ion-list>
+    </div>
+
+
+    <ion-list *ngSwitchCase="'sensors'">
+      <div class="valuediv1">
+        <div class="toptitle"> <span class="spanthird1">No.</span>
+        </div>
+        <div class="toptitle"> <span class="spanthird1">Fault</span>
+        </div>
+        <div class="toptitle"><span class="spanthird1">Power</span>
+        </div>
+        <div class="toptitle"> <span class="spanthird1">Raw Value</span>
+        </div>
+        <div class="toptitle"> <span class="spanthird1">Config</span>
+        </div>
+      </div>
+      <div style="height:1.1rem;background:#FFFFFFFF;width:100vw;"></div>
+      <ion-list mode="md">
+        <div class="valuediv" *ngFor="let value of Values2;let i = index;">
+          <div class="valueshow"><span class="spanfirst">{{i+1}}</span> </div>
+          <div class="valueshow">
+            <div class="div2">{{value.t1}}</div>
+            <!-- <ion-icon class="iconfault" name="md-alert" color="{{value.t1}}"></ion-icon> -->
+          </div>
+          <div class="valueshow">
+            <div class="div2">{{value.t2}}</div>
+          </div>
+
+          <div class="valueshow"><span class="spansecond">{{value.t3}}</span>
+          </div>
+          <div class="valueshow"> <span class="spanthird">{{value.t4}}</span>
+          </div>
+
+        </div>
+      </ion-list>
+    </ion-list>
+  </div>
+  <ion-list>
+
+  </ion-list>
+
+</ion-content>
