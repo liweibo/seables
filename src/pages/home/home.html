@@ -1,14 +1,171 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
+  <ion-navbar color='blecolor' class="headerh">
+    <ion-title class="title">
+      MVPE Status Display
     </ion-title>
+    <img style="height: 16px;width: 16px;float: right; position: absolute; bottom:1.8rem;right: 2rem;" (click)="scan()"
+      src="/assets/imgs/button／search@2x.png" alt="" />
   </ion-navbar>
+
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content [ngClass]="{true:'s2',false:'s1'}
+[ enable == true ]">
+
+
+  <!-- 首页未连接时，展示的页面 -->
+  <div [ngClass]="{'hidden':enable}">
+    <div style="text-align: center;">
+      <img style=" height: 17.99vh;width: 32vw;  margin-top: 16.49vh;
+    align-content: center;justify-content: center" src="/assets/imgs/img_bluetooth-off@2x.png" alt="" />
+    </div>
+    <div style="text-align: center;margin-top: 16.49vh;height: 2.7vh"> <span class="h1">Bluetooth is OFF</span>
+    </div>
+    <div style="text-align: center; margin-top: 1.5vh;height: 2.85vh"> <span class="h2">Please turn on the bluetooth for
+        connection</span>
+    </div>
+    <div class="btn">
+      <button (click)="gotosetting()" style="text-transform: none;" ion-button color="blecolor" round>Turn on
+        BlueTooth</button>
+    </div>
+
+  </div>
+
+
+  <div [ngClass]="{'hidden':isScan}">
+    <div style="text-align: center;">
+      <img style=" height: 17.99vh;width: 32vw;  margin-top: 16.49vh;
+    align-content: center;justify-content: center" src="/assets/imgs/img_bluetooth-off@2x.png" alt="" />
+    </div>
+    <div style="text-align: center;margin-top: 16.49vh;height: 2.7vh"> <span class="h1">Scan nothing</span>
+    </div>
+    <div style="text-align: center; margin-top: 1.5vh;height: 2.85vh"> <span class="h2">Please rescan</span>
+    </div>
+    <div class="btn">
+      <button (click)="scan()" style="text-transform: none;" ion-button color="blecolor" round>scan</button>
+    </div>
+  </div>
+
+  <div [ngClass]="{'hidden':!enable}">
+    <!-- 连接成功的ui，最顶部的一个card -->
+    <div [ngClass]="{'hidden':!itemSelected}" (swipe)="swipeEvent($event)">
+      <ion-list mode="md" no-lines >
+        <button mode="md" class="btncontent" ion-item (click)="connected(topShowCon,peripheralconsole)">
+          <div>
+            <div class="left">
+              <p class="p1">{{ topShowCon.name }}</p>
+              <p class="p2">{{ topShowCon.id }}</p>
+            </div>
+            <div class="right">
+              <div>
+                <div style="float:left;margin-right: 8px;padding-bottom: 2px;">
+                  <ion-icon color="blecolor" name="ios-bluetooth-outline"></ion-icon>
+                </div>
+                <div class="rssiconnect"><span class="rssiconnectspan">{{topShowCon.rssi}}</span> </div>
+              </div>
+              <div class="topconnected">Connected</div>
+            </div>
+          </div>
+        </button>
+      </ion-list>
+    </div>
+
+    <!-- 页面扫描成功时展示的数据 -->
+
+    <!-- [ngClass]="{'hidden':!have$}" -->
+    <ion-list mode="md" no-lines>
+      <!-- <button ion-item *ngFor="let device of devices" (click)="deviceSelected(device)">
+        <h2>{{ device.name || 'Unnamed' }}</h2>
+        <p>设备号：{{ device.id }}</p>
+        <p>信号强度: {{device.rssi}}</p>
+      </button> -->
+
+      <button class="btncontent1" mode="md" ion-item *ngFor="let device of devices"
+        (click)="deviceOnlySelected(device)">
+        <div>
+          <div class="left">
+            <p class="p1">{{ device.name  }}</p>
+            <p class="p2">{{ device.id }}</p>
+          </div>
+          <div class="right">
+            <div class="rightchild">
+              <div style="float:left;margin-right: 8px;padding-bottom: 2px;">
+                <ion-icon color="{{device.rssi=='STRONG'?'strong':'weak'}}" name="ios-bluetooth-outline"></ion-icon>
+              </div>
+              <div *ngIf="device.rssi=='STRONG'; then thenBlock else elseBlock"></div>
+              <ng-template #thenBlock>
+                <div class="rssi"><span class="rssispan">{{device.rssi}}</span></div>
+              </ng-template>
+              <ng-template #elseBlock>
+                <div class="rssi1"><span class="rssispan">{{device.rssi}}</span></div>
+              </ng-template>
+              <!-- <div class="rssi1" [ngClass]="{'rssi': device.rssi=='STRONG'}">{{device.rssi}}</div> -->
+            </div>
+          </div>
+        </div>
+      </button>
+
+    </ion-list>
+
+    
+<!-- 
+    <div style="width:100vw;height:5px;background:#f00"></div>
+    <div>scan信息：</div>
+    <div>
+      <p>{{devicesconsole}}</p>
+    </div>
+
+    <div style="width:100vw;height:5px;background:#f00"></div>
+    <div>设备信息：</div>
+    <div>
+      <p>{{peripheralconsole}}</p>
+    </div>
+
+
+
+    <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+    <div>200字节数据打印：</div>
+    <div>
+      <p>{{readdataconsole22}}</p>
+    </div>
+
+    <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+    <div>200字节数据的校验和</div>
+    <div>
+      <p>sum = {{consolesum}} validate = {{consolevalidatedec10}}</p>
+    </div>
+
+
+    <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+    <div>128字节数据打印：</div>
+    <div>
+      <p>{{readdataconsole33}}</p>
+    </div>
+
+
+    <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+    <div>128字节数据的校验和</div>
+    <div>
+      <p>sum = {{consolesum1}} validate = {{consolevalidatedec101}}</p>
+    </div>
+
+    <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
+    <div>328字节数据打印：</div>
+    <div>
+      <p>{{readdataconsole44}}</p>
+    </div> -->
+
+
+
+
+
+    <!-- 数据打印 -->
+
+  </div>
 </ion-content>
+<!-- 
+<ion-footer>
+  <ion-toolbar>
+    <p style="text-align:center">{{ statusMessage }}</p>
+  </ion-toolbar>
+</ion-footer> -->

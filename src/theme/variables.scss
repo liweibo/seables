@@ -34,11 +34,18 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
+  primary:   #0097A7,
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  blecolor:#0097A7,
+  con:rgba(255,255,255,1),
+  huise:rgba(189,189,189,1),
+  mylight:rgba(255,255,255,0.65),
+  select:#ffff,
+strong:rgba(117,117,117,1),
+weak:rgba(189,189,189,1)
 );
 
 
@@ -46,15 +53,19 @@ $colors: (
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
-
+$loading-md-spinner-color:#0097A7;
+$loading-md-background:rgba(0,0,0,0.8);
+$loading-md-text-color:#fff;
 
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
-
-
+$segment-button-md-text-color-activated:#fff;
+$segment-button-md-border-color-activated:#fff;
+$segment-button-md-border-bottom-width: 2px;
+$segment-button-md-font-size:15px;
+$segment-button-md-border-bottom-color:#0097A7;
 
 // App Windows Variables
 // --------------------------------------------------
