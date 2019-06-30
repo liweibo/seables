@@ -28,7 +28,8 @@
     "@ionic-native/status-bar": "~4.18.0",
     "@ionic/storage": "2.2.0",
     "@types/jquery": "^3.3.29",
-    "cordova-android": "7.1.4",
+    "cordova-android": "^8.0.0",
+    "cordova-ios": "^5.0.1",
     "cordova-open-native-settings": "1.5.2",
     "cordova-plugin-ble-central": "1.2.2",
     "cordova-plugin-compat": "^1.2.0",
@@ -67,7 +68,8 @@
       "cordova-plugin-screen-orientation": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

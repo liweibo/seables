@@ -15,6 +15,7 @@ const MY_CHARACTERISTIC = 'aa4bd7c3-2906-4b7f-82a9-1cad53a49775';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  mvpeNameallhome: any = "";
 
 
   pcbshidu: any;
@@ -76,10 +77,10 @@ export class HomePage {
   consolevalidatedec10: any;
   consolesum1: any;
   consolevalidatedec101: any;
-
+  consolesend: any;
   timevalue1: any;
   timevalue2: any;
-
+  changeNameRes: any;
   sentcount: any = 0;//蓝牙发射的帧数，一条数据被分为两帧来发送
   mydata: number;
   peripheral: any = {};//某个已连接的设备
@@ -137,7 +138,7 @@ export class HomePage {
     const confirm = this.alertCtrl.create({
       title: 'Bluetooth is OFF',
       message: 'Please turn on the bluetooth in your system settings',
-      mode:'ios',
+      mode: 'ios',
       buttons: [
         {
           text: 'OK',
@@ -284,7 +285,7 @@ export class HomePage {
     let toast = this.toastCtrl.create({
       message: 'Scanning failed',
       position: 'top',
-      duration: 2000
+      duration: 2000,
     });
     toast.present();
   }
@@ -327,6 +328,10 @@ export class HomePage {
         this.topShowCon.name = device.name;
         // this.topShowCon.rssi = device.rssi;
         this.topShowCon.rssi = (peripheral.rssi > (-70)) ? 'STRONG' : 'WEAK';
+        setTimeout(() => {
+          this.senRequestMVPEname();
+        }, 500);
+        // this.presentLoading(this.mvpeNameallhome, 5000);
       },
       peripheral => {
         this.presentLoading("Time out", 1000);
@@ -367,155 +372,83 @@ export class HomePage {
     // this.reso(bb);
 
   }
-
+  onDataChangeName(buffer: ArrayBuffer) {
+    var data = new Uint8Array(buffer);
+    this.changeNameRes = data[3];
+    this.presentLoading("修改name的返回码：" + data[3], 6000);
+  }
 
   onDataChange(buffer: ArrayBuffer) {
-    //sentcount为偶数，表示一整条数据的发送开始即200字节的那帧开始发。为奇数，表示128字节的那帧数据在发
-    if (this.sentcount % 2 == 0) {//200字节开始发
-      var data = new Uint8Array(buffer);
-      var data1 = new Uint8Array(buffer) + '';
-      console.log("data[197]的值" + data[198] + '-----------' + 'data的值' + data);
-      console.log("200字节数据" + data);
-      console.log("200字节数据加了''符号。。。" + data1);
-      this.ngZone.run(() => {
-        var str = data + '';
-        var strs = new Array(); //定义一数组 
-        var strs1 = new Array();
+    var data = new Uint8Array(buffer);
+    this.ngZone.run(() => {
+      var str = data + '';
+      var strs = new Array(); //定义一数组 
+      strs = str.split(',');///
 
-
-        var j = 0;///
-
-        var sum = 0;
-        var validate3 = '';
-        var validate3to2 = '';
-        var validate4 = '';
-        var validate4to2 = '';
-        var validatesum = '';
-        var validatedec10 = 0;
-
-
-        strs = str.split(',');///
-
-
-        //和校验，从第三个字节开始累加，到倒数第五个字节为止。
-        for (let index = 2; index < strs.length - 4; index++) {
-          sum += parseInt(strs[index]);
-        }
-        //倒数第三个四个字节拼接起来
-        validate4 = strs[strs.length - 4];
-        validate3 = strs[strs.length - 3];
-        validate4to2 = parseInt(validate4).toString(2);
-        var two = parseInt(validate3).toString(2);
-        if (8 - two.length != 0) {
-          var y = 8 - two.length;
-          for (var i = 0; i < y; i++) { validate3to2 += '0'; }
-          validate3to2 += two;
-          validatesum = validate4to2 + validate3to2;
-          validatedec10 = parseInt(validatesum, 2);
-        } else {
-          validate3to2 = two;
-          validatesum = validate4to2 + validate3to2;
-          validatedec10 = parseInt(validatesum, 2);
-        }
-        this.readdataconsole22 = data;
-        this.consolesum = sum;
-        this.consolevalidatedec10 = validatedec10;
-        console.log('200字节的sum = ' + sum + ',validate = ' + validatedec10);
-
-
-        for (var i = 0; i < strs.length - 4; i++) {//去掉后4个字节
-          strs1[j] = strs[i];
-          j++;
-        }
-        var strs2 = strs1.toString();
-        this.readdataconsole2 = strs2;
-        console.log('200字节去掉尾的数据' + strs2);
-      });
-
-    } else {//128字节开始发
-      var data = new Uint8Array(buffer);
-      console.log("data[125]的值" + data[125] + '-----------' + 'data的值' + data);
-      console.log("128字节数据" + data);
-
-      this.ngZone.run(() => {
-        var str = data + '';
-        var strs = new Array(); //定义一数组 
-        var strs1 = new Array();
-        var j = 0;
-
-        var sum = 0;
-        var validate3 = '';
-        var validate3to2 = '';
-        var validate4 = '';
-        var validate4to2 = '';
-        var validatesum = '';
-        var validatedec10 = 0;
-        strs = str.split(",");
-        //和校验，从第三个字节开始累加，到倒数第五个字节为止。
-        for (let index = 2; index < strs.length - 4; index++) {
-          sum += parseInt(strs[index]);
+      if (strs[3] == 115) {//mvpename获取的返回功能码
+        var mvpeName = "";
+        if (strs.length > 6) {
+          for (var i = 4; i < strs.length - 2; i++) {
+            //ascii转为字符
+            mvpeName += String.fromCharCode(data[i]);
+          }
         }
 
-        //倒数第三个四个字节拼接起来
-        validate4 = strs[strs.length - 4];
-        validate3 = strs[strs.length - 3];
-        validate4to2 = parseInt(validate4).toString(2);
+        this.mvpeNameallhome = mvpeName;
+      }
 
-        var two = parseInt(validate3).toString(2);
-        if (8 - two.length != 0) {
-          var y = 8 - two.length;
-          // var mystr = '';
-          for (var i = 0; i < y; i++) { validate3to2 += '0'; }
-          validate3to2 += two;
-          validatesum = validate4to2 + validate3to2;
-          validatedec10 = parseInt(validatesum, 2);
-        } else {
-          validate3to2 = two;
-          validatesum = validate4to2 + validate3to2;
-          validatedec10 = parseInt(validatesum, 2);
+      if (strs[3] == 114) {//修改mvpename的返回功能码
+        if (strs[4] == 1) {
+          //修改成功
+          this.tosatMethod("The MVPE NAME was successfully modified");
         }
+        if (strs[4] == 0) {
+          //修改失败Name modification failed
+          this.tosatMethod("The MVPE NAME modification failed");
 
-        this.consolesum1 = sum;
-        this.consolevalidatedec101 = validatedec10;
-        console.log('128字节的sum = ' + sum + ',validate = ' + validatedec10);
-
-        for (var i = 6; i < strs.length - 6; i++) {//去掉前6字节与后6个字节
-          strs1[j] = strs[i];
-          j++;
         }
-        var strs2 = strs1.toString();
-        this.readdataconsole33 = data;
-        this.readdataconsole3 = strs2;
-        this.readdataconsole4 = this.readdataconsole2 + ',' + this.readdataconsole3;
-        this.readdataconsole44 = this.readdataconsole22 + ',' + this.readdataconsole33;
-        console.log('128字节去掉头尾的数据' + strs2);
-        console.log("拼接数据的字符串形式(去掉了头尾)" + this.readdataconsole4);
-        console.log("拼接数据的字符串形式" + this.readdataconsole44);
+      }
 
-        //把拼接的数据转换为数组形式，便于数据解析
-        var ss = this.readdataconsole4;
-        var strsss = new Array(); //定义一数组 
-        strsss = ss.split(',');
-        this.readdataconsole4arry = strsss;
-        console.log("拼接数据的数组形式(去掉了头尾)：" + strsss);
-      });
+    });
 
-    }
+
+
 
   }
 
-  connected(topShowCon, peripheralconsole) {
-    this.navCtrl.push(DetailsPage, { device: topShowCon, periphers: peripheralconsole });
+  tosatMethod(messa) {
+    let toast = this.toastCtrl.create({
+      message: messa,
+      position: 'top',
+      duration: 2000,
+    });
+    toast.present();
+  }
+
+  connected(topShowCon, peripheralconsole, mvpeNameallhome) {
+
+    this.ble.disconnect(topShowCon.id).then(
+      () => { },
+      () => { }
+    );
+    setTimeout(() => {
+      this.navCtrl.push(DetailsPage, {
+        device: topShowCon, periphers: peripheralconsole,
+        fromhome: mvpeNameallhome
+      });
+    }, 1500);
   }
 
   swipeEvent($event) {
     this.presentPrompt();
   }
-
+  pressEvent($event) {
+    this.presentPromptMVPE();
+  }
   presentPrompt() {
     let alert = this.alertCtrl.create({
       title: 'Modify name',
-      message: 'Do you want to modify the name of peripheral?',
+      message: 'Do you want to modify the name of bluetooth board?',
       mode: 'ios',
       inputs: [
         {
@@ -529,7 +462,6 @@ export class HomePage {
           text: 'Cancel',
           role: 'cancel',
           handler: data => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -537,22 +469,29 @@ export class HomePage {
           handler: data => {
             console.log(typeof (data.name));
             let dataIsOk = this.reTest(data.name);
-            let tempdata = data.name + '';
+            let tempdata = data.name + '';//更改的设备名
+
+
             if (dataIsOk) {
               //发送数据
-              var arr = [];
-              for (var i = 0, j = tempdata.length; i < j; ++i) {
-                arr.push(tempdata.charCodeAt(i));
-              }
-              var dataSend = new Uint8Array(arr);
+              // var arr = [];
+              // for (var i = 0, j = tempdata.length; i < j; ++i) {
+              //   arr.push(tempdata.charCodeAt(i));
+              // }
+              // var dataSend = new Uint8Array([]);
+              // dataSend = new Uint8Array(arr);
 
-              this.ble.write(this.topShowCon.id, MY_SERVICE, MY_CHARACTERISTIC, dataSend.buffer).then(() => {
-                // this.presentAlertTest();
-                //扫描蓝牙设备
-                this.scan();
-              }, e => {
-                this.presentAlertTest1();
-              });
+              // this.consolesend = JSON.stringify(dataSend.buffer);
+              // this.ble.write(this.topShowCon.id, MY_SERVICE, MY_CHARACTERISTIC, dataSend.buffer).then(() => {
+              //   // this.presentAlertTest();
+              //   // this.mendName();//断开  再连接
+              //   //扫描蓝牙设备
+              //   this.scan();//再断开 再扫描
+              // }, e => {
+              //   this.presentAlertTest1();
+              // });
+
+              this.senRequestChangeName(tempdata);
 
             }
           }
@@ -562,6 +501,132 @@ export class HomePage {
     alert.present();
   }
 
+  presentPromptMVPE() {
+    let alert = this.alertCtrl.create({
+      title: 'Modify name',
+      message: 'Do you want to modify the name of MVPE board?',
+      mode: 'ios',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'please enter a new name'
+        },
+
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            console.log(typeof (data.name));
+            let dataIsOk = this.reTest(data.name);
+            let tempdata = data.name + '';//更改的设备名
+            if (dataIsOk) {
+              this.senRequestChangeMVPEName(tempdata);
+
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+
+  //修改设备蓝牙名字
+  senRequestChangeName(peripheralName: any) {
+    // var incre = this.increaseValueChangeName + "";
+    // var dataLen = 1 + peripheralName.length;//字节个数
+    // var dataLenStr = 1 + peripheralName.length + "";//字节个数(字符串形式)
+
+    // var nameSum = 0;
+    // for (var i = 0, j = peripheralName.length; i < j; ++i) {
+    //   nameSum += peripheralName.charCodeAt(i);
+    // }
+    // var validateSum = this.increaseValueChangeName + dataLen + 48 + nameSum + "";
+    // var beforeName = "170|" + incre + "|" + dataLenStr + "|48|";
+    // var afterName = "|" + validateSum + "|187";
+    // var sendStr = beforeName + peripheralName + afterName;//发送帧格式
+    // //设备名
+    // var arr = [];
+    // for (var i1 = 0, j1 = sendStr.length; i1 < j1; ++i1) {
+    //   arr.push(sendStr.charCodeAt(i1));
+    // }
+    // var dataSend = new Uint8Array([]);
+    // dataSend = new Uint8Array(arr);
+
+
+    var lenArr = peripheralName.length + 6;
+    var data = new Uint8Array(lenArr);
+    data[0] = 0xAA;
+    data[1] = 0;
+    data[2] = 2;
+    data[3] = 0x30;
+
+    var nameSum = 0;
+    for (var i = 0; i < peripheralName.length; ++i) {//////////////i  j
+      data[i + 4] = peripheralName.charCodeAt(i);
+      nameSum += peripheralName.charCodeAt(i);
+    }
+    var Checksum = 2 + 48 + nameSum;
+
+    data[lenArr - 2] = Checksum;
+    data[lenArr - 1] = 0xBB;
+    this.ble.write(this.peripheral.id, MY_SERVICE, MY_CHARACTERISTIC, data.buffer).then(() => {
+      // this.ble.read(this.peripheral.id, MY_SERVICE, MY_CHARACTERISTIC).then(
+      //   data => this.onDataChangeName(data), () => { }
+      // )
+      // this.presentLoading("修改name数据指令发送成功", 2500);
+      this.scan();//再断开 再扫描
+    }, e => {
+      this.presentAlertTest2();
+    });
+  }
+
+
+  //修改设备MVPE名字
+  senRequestChangeMVPEName(peripheralName: any) {
+    var lenArr = peripheralName.length + 6;
+    var data = new Uint8Array(lenArr);
+    data[0] = 0xAA;
+    data[1] = 0;
+    data[2] = 2;
+    data[3] = 0x32;
+
+    var nameSum = 0;
+    for (var i = 0; i < peripheralName.length; ++i) {//////////////i  j
+      data[i + 4] = peripheralName.charCodeAt(i);
+      nameSum += peripheralName.charCodeAt(i);
+    }
+    var Checksum = 2 + 50 + nameSum;
+
+    data[lenArr - 2] = Checksum;
+    data[lenArr - 1] = 0xBB;
+    this.ble.write(this.peripheral.id, MY_SERVICE, MY_CHARACTERISTIC, data.buffer).then(() => {
+      // this.ble.read(this.peripheral.id, MY_SERVICE, MY_CHARACTERISTIC).then(
+      //   data => this.onDataChangeName(data), () => { }
+      // )
+      // this.presentLoading("修改name数据指令发送成功", 2500);
+      this.scan();//再断开 再扫描
+    }, e => {
+      this.presentAlertTest2();
+    });
+  }
+
+
+  presentAlertTest2() {
+    let alert = this.alertCtrl.create({
+      title: 'change ble name  instruction failed',
+      buttons: ['Ok'],
+      mode: 'ios'
+    });
+    alert.present();
+  }
   presentAlert() {
     let alert = this.alertCtrl.create({
       title: 'Input data type is incorrect!',
@@ -584,14 +649,86 @@ export class HomePage {
   presentAlertTest() {
     let alert = this.alertCtrl.create({
       title: 'Success',
-      buttons: ['Ok']
+      buttons: ['Ok'],
+      mode: 'ios'
     });
     alert.present();
   }
   presentAlertTest1() {
     let alert = this.alertCtrl.create({
       title: 'Failed',
-      buttons: ['Ok']
+      buttons: ['Ok'],
+      mode: 'ios'
+    });
+    alert.present();
+  }
+
+  mendName() {
+    this.itemSelected = false;
+    this.ble.disconnect(this.peripheral.id).then(
+      () => console.log('scan()时已断开连接： ' + JSON.stringify(this.peripheral)),
+      () => console.log('scan()时断开蓝牙出错： ' + JSON.stringify(this.peripheral))
+    )
+
+    this.ble.isEnabled().then(
+      () => { this.enable = true },
+      () => { this.enable = false }
+    );
+    if (this.enable == true) {
+      this.ble.connect(this.peripheral.id).subscribe(
+        peripheral => {
+        },
+        peripheral => {
+        }
+      );
+    }
+  }
+
+
+  //获取mvpe板的名字
+  senRequestMVPEname() {
+    var data = new Uint8Array(6);
+    data[0] = 0xAA;
+
+    data[1] = 0;
+    data[2] = 1;
+    data[3] = 0x33;
+    var Checksum = 1 + 51;
+    data[4] = Checksum;
+    data[5] = 0xBB;
+
+    this.ble.write(this.topShowCon.id, MY_SERVICE, MY_CHARACTERISTIC, data.buffer).then(() => {
+      this.presentLoading("MVPE name获取指令发送成功", 1500);
+      // this.ble.read(this.peripheral.id, MY_SERVICE, MY_CHARACTERISTIC).then(
+      //   data => this.onDataChangeMVPEName(data), () => { }
+      // )
+      this.ble.startNotification(this.topShowCon.id, MY_SERVICE, MY_CHARACTERISTIC).subscribe(
+        data => {
+          this.onDataChange(data);
+        }, () => { }
+      );
+
+    }, e => {
+      this.presentAlertTestMvpeName();
+    });
+  }
+
+  onDataChangeMVPEName(buffer: ArrayBuffer) {//读取mvpe name
+    var data = new Uint8Array(buffer);
+    var mvpeName = "";
+    for (var i = 4; i < data.length - 2; i++) {
+      //ascii转为字符
+      mvpeName += String.fromCharCode(data[i]);
+    }
+    // this.mvpeNameall = mvpeName;
+    this.presentLoading("读取MVPEname：" + data, 6000);
+  }
+  presentAlertTestMvpeName() {
+    let alert = this.alertCtrl.create({
+      title: 'Get MVPE name instruction failed',
+      buttons: ['Ok'],
+      mode: 'ios'
+
     });
     alert.present();
   }

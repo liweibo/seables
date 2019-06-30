@@ -111,6 +111,22 @@ display:-webkit-flex;
 display: flex;
 }
 
+.pcbset{
+  font-size:11px;
+font-weight:500;
+background:rgba(238,240,244,1);
+height: 30px;
+color:rgba(136,136,136,1);
+line-height:14px;
+width: 100vw;
+text-align: start;
+// margin-top: 15px;
+padding-left: 20px;
+// padding-top: 11px;
+align-items:center;
+display:-webkit-flex; 
+display: flex;
+}
 .spandiv{
   // margin-top: 15px;
 background:rgba(255,255,255,1);
@@ -143,6 +159,18 @@ font-size:17px;
 font-weight:400;
 background:rgba(255,255,255,1);
 color:rgba(0,0,0,0.65);
+line-height:21px;
+}
+
+.spanStatus{
+  position: relative;
+top:22%;
+float:right;
+margin-right: 20px;
+font-size:17px;
+font-weight:400;
+background:rgba(255,255,255,1);
+color:#0097A7;
 line-height:21px;
 }
 

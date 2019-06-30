@@ -12,19 +12,22 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { SetPage } from '../pages/set/set'
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     DetailsPage,
     TestPage,
-    ModalPage
+    ModalPage,
+    SetPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp,{mode:"md",
-    backButtonText: '', backButtonIcon:''
- })
+    IonicModule.forRoot(MyApp, {
+      mode: "md",
+      backButtonText: '', backButtonIcon: ''
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -32,15 +35,15 @@ import { HomePage } from '../pages/home/home';
     HomePage,
     DetailsPage,
     TestPage,
-    ModalPage
+    ModalPage, SetPage
   ],
   providers: [
     StatusBar,
     ScreenOrientation,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler,},
+    { provide: ErrorHandler, useClass: IonicErrorHandler, },
     BLE,
     OpenNativeSettings
   ]
 })
-export class AppModule {}
+export class AppModule { }

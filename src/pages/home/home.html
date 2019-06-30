@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color='blecolor' class="headerh">
     <ion-title class="title">
-      MVPE Status Display
+      Bluetooth Browser 
     </ion-title>
     <img style="height: 16px;width: 16px;float: right; position: absolute; bottom:1.8rem;right: 2rem;" (click)="scan()"
       src="/assets/imgs/button／search@2x.png" alt="" />
@@ -48,13 +48,13 @@
 
   <div [ngClass]="{'hidden':!enable}">
     <!-- 连接成功的ui，最顶部的一个card -->
-    <div [ngClass]="{'hidden':!itemSelected}" (swipe)="swipeEvent($event)">
+    <div [ngClass]="{'hidden':!itemSelected}" (swipe)="swipeEvent($event)"  (press)="pressEvent($event)">
       <ion-list mode="md" no-lines >
-        <button mode="md" class="btncontent" ion-item (click)="connected(topShowCon,peripheralconsole)">
+        <button mode="md" class="btncontent" ion-item (click)="connected(topShowCon,peripheralconsole,mvpeNameallhome)">
           <div>
             <div class="left">
               <p class="p1">{{ topShowCon.name }}</p>
-              <p class="p2">{{ topShowCon.id }}</p>
+              <p class="p2">MVPE NAME:{{ mvpeNameallhome}}</p>
             </div>
             <div class="right">
               <div>
@@ -106,7 +106,7 @@
       </button>
 
     </ion-list>
-
+  
     
 <!-- 
     <div style="width:100vw;height:5px;background:#f00"></div>

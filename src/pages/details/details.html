@@ -14,21 +14,21 @@
           <ion-icon class="btnarrow" name="md-arrow-back"></ion-icon>
         </button>
       </ion-buttons>
-      <ion-title style="text-align:center;margin-right: 9vw;font-size: 18px">Details</ion-title>
+      <ion-title style="text-align:center;margin-right: 9vw;font-size: 18px">Status Display</ion-title>
       <ion-buttons right>
         <button ion-button disabled="disabled" style="width:20px">
         </button>
       </ion-buttons>
     </ion-navbar>
-    <div>
+    <div (swipe)="swipeEvent($event)">
 
       <ion-list mode="md" style="height:7.62vh" no-lines>
         <!-- [ngClass]="{'hidden':true}"  -->
         <button mode="md" class="btncontent" ion-item (click)="breakCon()">
           <div>
-            <div  class="left">
+            <div class="left">
               <p class="p1">{{ text1 }}</p>
-              <p class="p2">{{ text2 }}</p>
+              <p class="p2">MVPE NAME:{{ text2 }}</p>
             </div>
             <div class="right">
               <div>
@@ -69,8 +69,7 @@
 
 
 <ion-content>
-  <!-- (ionScroll)="scrollEvent($event)" overflow-scroll="true" -->
-  <!-- <div style="height:102px;width:100vw;background:transparent"></div> -->
+
 
   <div [ngSwitch]="tabs">
     <div *ngSwitchCase="'general'">
@@ -145,113 +144,17 @@
         <span class="span2">{{temp2}} ℃</span>
       </div>
 
-      <!-- <div class="pcb">Temp1</div>
-      <div class="spandiv">
-        <span class="span1">{{temp1}}</span>
-        <span class="span2">Deg C</span>
-      </div>
-
-
-      <div class="pcb">Temp2</div>
-      <div class="spandiv">
-        <span class="span1">{{temp2}}</span>
-        <span class="span2">Deg C</span>
-      </div> -->
-
-
-      <!-- <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>帧数：</div>
-      <div>
-        <p>第{{sentcount}}帧</p>
-      </div> -->
-
-      <!-- <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>volAhavebac打印：</div>
-      <div>
-        <p>{{volAhavebac}}</p>
-      </div>
-
-      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>volBhavebac打印：</div>
-      <div>
-        <p>{{volBhavebac}}</p>
-      </div>
-
-      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>volvesPercentArry打印：</div>
-      <div>
-        <p>{{volvesPercentArry}}</p>
-      </div>
-
-
-      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>volvesmAArray打印：</div>
-      <div>
-        <p>{{volvesmAArray}}</p>
-      </div>
-
-
-      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>power打印：</div>
-      <div>
-        <p>{{power}}</p>
-      </div>
-
-
-
-      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>Values</div>
-      <div>
-        <p>{{ValuesString}}</p>
-      </div>
-
-      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>Values2</div>
-      <div>
-        <p>{{Values2String}}</p>
-      </div>  -->
-
-
-     <div style="width:100vw;height:5px;background:#f00"></div>
-      <div>设备信息：</div>
-      <div>
-        <p>{{peripheralconsole}}</p>
-      </div>
-      flaged
-      <div style="width:100vw;height:5px;background:#f00"></div>
-      <div>flaged:</div>
-      <div>
-        <p>{{flaged}}</p>
-      </div>
-      <div style="width:100vw;height:5px;background:#f00"></div>
-      <div>168完整字节打印：</div>
+      <!-- <div style="width:100vw;height:5px;background:#f00"></div>
+      <div>第一帧完整字节打印：</div>
       <div>
         <p>{{readdataconsole22}}</p>
       </div>
 
       <div style="width:100vw;height:5px;background:#f00"></div>
-      <div>160完整字节打印：</div>
+      <div>第二帧完整字节打印：</div>
       <div>
         <p>{{readdataconsole33}}</p>
-      </div>
-
-      <div style="width:100vw;height:5px;background:#f00"></div>
-      <div>328完整字节打印：</div>
-      <div>
-        <p>{{readdataconsole44}}</p>
-      </div>
-
-      <div style="width:100vw;height:5px;background:rgb(4, 0, 255)"></div>
-      <div>328-4-6-6 = 312个字节数据打印：</div>
-      <div>
-        <p>{{readdataconsole4}}</p>
-      </div>
-
-      <div *ngFor="let value of readdataconsole4arry;let i = index;">
-        <div>
-          <span>312中第{{i}}个字节：{{value}}</span>
-        </div>
-      </div> 
+      </div> -->
 
     </div>
 
@@ -293,6 +196,8 @@
           <div class="valueshow"> <span class="spanthird">mA</span>
           </div>
 
+
+
         </div>
       </ion-list>
     </div>
@@ -330,10 +235,47 @@
 
         </div>
       </ion-list>
+
     </ion-list>
   </div>
-  <ion-list>
 
-  </ion-list>
+
+  <ion-fab left bottom>
+    <button ion-fab mini (click)="setpage()">
+      <ion-icon name="ios-cog"></ion-icon>
+    </button>
+  </ion-fab>
+  <!-- 底部查询蓝牙板与mvpe板的连接状态，设置参数用。 -->
+  <div [ngClass]="{'hidden':search}">
+    <div style="height: 10px;width:100vw">
+    </div>
+
+    <div class="pcbset"> <span class="headtext">Get the Bluetooth board and MVPE board connection status</span></div>
+    <div class="spandiv">
+      <span class="span1">Status</span>
+      <span class="spanStatus">{{conStatus}}</span>
+    </div>
+    <div class="line"></div>
+    <div class="pcbset"> <span class="headtext">Send setting parameters instruction</span></div>
+    <ion-list>
+
+      <ion-item>
+        <ion-label color="primary" stacked>Address</ion-label>
+        <ion-input type="text" clearOnEdit="true" clearInput [(ngModel)]="addre"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="primary" stacked>Value</ion-label>
+        <ion-input type="text" clearOnEdit="true" clearInput [(ngModel)]="instru"></ion-input>
+      </ion-item>
+
+    </ion-list>
+    <div padding>
+        <p style="text-align:center;color: #0097A7;font-size:12px;">{{ retuValue }}</p>
+      </div>
+    <div padding>
+      <button ion-button block (click)="sendInstru()">Send</button>
+    </div>
+  </div>
 
 </ion-content>

@@ -17,8 +17,31 @@ import { AlertController } from 'ionic-angular';
   templateUrl: 'test.html',
 })
 export class TestPage {
+  consolesend:any;
+  consolesend1:any;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController) {
+    
+    console.log( this.initData() );
+  
+  }
+
+  async initData(){
+    let result = function(){
+      return new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+          // if (this.readdataconsole4arry.length > 310) {
+          //   this.reso(this.readdataconsole4arry);
+          // }
+          resolve(1);
+        },3000);
+      });
+    }
+    let data = await result();
+    console.log(data);
+    this.initData();
+    return data;
   }
 
   ionViewDidLoad() {
@@ -57,7 +80,21 @@ export class TestPage {
            let dataIsOk = this.reTest(data.name);
            if (dataIsOk) {
              //发送数据
-             this.presentAlertTest();
+            //  this.presentAlertTest();
+            let tempdata = data.name + '';
+            var arr = [];
+            for (var i = 0, j = tempdata.length; i < j; ++i) {
+              arr.push(tempdata.charCodeAt(i));
+            }
+            var dataSend = new Uint8Array([]);
+            dataSend = new Uint8Array(arr);
+
+            this.consolesend =JSON.stringify(dataSend.buffer) ;
+           var ss =dataSend.buffer;
+           this.consolesend1 = ss;
+          var myva = String.fromCharCode.apply(null, new Uint8Array(ss));
+           console.log('name:'+myva );
+
            }else
            {
             //  this.presentAlertTest1();
